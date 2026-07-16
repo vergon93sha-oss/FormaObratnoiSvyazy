@@ -43,21 +43,23 @@ background-attachment: fixed;
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 960px;
+            max-width: 1200px; /* Увеличили с 960px, чтобы на ПК было крупнее */
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: 24px;
-            padding: 40px;
+            padding: 40px 30px; /* Оптимизировали отступы */
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
         }
 
         /* Шапка и Логотип */
         .header {
-            display: flex;
+           display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
+            flex-wrap: wrap; /* Кнопки перенесутся вниз, если не поместятся */
+            gap: 15px;
             margin-bottom: 30px;
         }
 
@@ -150,6 +152,7 @@ background-attachment: fixed;
             align-items: flex-end;
             gap: 12px;
             width: 100%;
+            flex-wrap: wrap; /* Позволит полю встать под текстом на смартфонах */
         }
 
         .info-label {
@@ -361,6 +364,26 @@ background-attachment: fixed;
             font-size: 11px;
             color: #94a3b8;
         }
+                /* Адаптивность под мобильные телефоны */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px; /* Уменьшаем внешние отступы страницы */
+            }
+            .container {
+                padding: 20px 15px; /* Меньше пустых полей внутри контейнера */
+                border-radius: 12px;
+            }
+            .title {
+                font-size: 18px; /* Уменьшаем главный заголовок */
+            }
+            .info-label {
+                width: 100%; /* Текст ФИО/Дата будет над полем, а не сбоку */
+            }
+            .info-input {
+                width: 100%;
+            }
+        }
+
     </style>
 </head>
 <body>
