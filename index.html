@@ -497,39 +497,17 @@ background-attachment: fixed;
     }
 }
 
-body {
-    font-family: 'Montserrat', sans-serif;
-    min-height: 100vh;
-    color: #2d3748;
-    padding: 40px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    position: relative;
-    margin: 0; /* Убирает белые поля вокруг видео */
-}
-
-/* Добавьте этот кусочек прямо перед закрывающим </style> */
-.video-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-    z-index: -1;
-    pointer-events: none;
-}
 
 
     </style>
 </head>
 <body>
-<video autoplay muted loop playsinline class="video-bg">
-    <source src="87786-602074234.mp4" type="video/mp4">
-</video>
 
-  
+    <!-- Задний план (Облака) -->
+    <div class="cloud-decor" style="width: 300px; height: 130px; top: 20px; left: 20px;"></div>
+    <div class="cloud-decor" style="width: 400px; height: 160px; top: 30%; right: 40px;"></div>
+
+    <div class="container">
         
         <!-- Шапка -->
         <div class="header">
