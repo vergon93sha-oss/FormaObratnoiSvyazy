@@ -383,117 +383,120 @@ background-attachment: fixed;
                 width: 100%;
             }
         }
-        @media (max-width: 600px) {
-    /* 1. Превращаем таблицу и ее элементы в обычные блоки */
+       @media (max-width: 600px) {
+    /* 1. Сбрасываем таблицу и включаем Flex-контейнер для всей таблицы */
     .table-wrapper {
-        overflow-x: visible; /* Полностью убираем прокрутку */
+        overflow-x: visible;
         box-shadow: none;
         border: none;
     }
-    
-    .tasting-table, 
-    .tasting-table thead, 
-    .tasting-table tbody, 
-    .tasting-table tr, 
-    .tasting-table th, 
-    .tasting-table td { 
-        display: block; 
+    .tasting-table {
+        display: flex;
+        flex-direction: column;
+        min-width: 100% !important;
         width: 100% !important;
-        box-sizing: border-box;
     }
-
-    /* 2. Скрываем стандартную шапку таблицы на мобильных */
     .tasting-table thead {
-        display: none;
+        display: none; /* Скрываем шапку ПК-версии */
+    }
+    .tasting-table tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 25px; /* Отступ между большими блоками-критериями */
     }
 
-    /* 3. Оформляем блок с вводом Шифра проб, выносим его наверх */
+    /* 2. Поле "Шифр проб" выносим в самый верх всей формы */
     .tasting-table tbody tr:first-child td[rowspan="6"] {
         display: block;
-        background: #f1f5f9 !important;
+        width: 100% !important;
+        background: #f8fafc !important;
         padding: 15px;
-        margin-bottom: 20px;
-        border: 1px dashed #94a3b8;
+        border: 1px dashed #cbd5e1;
         border-radius: 8px;
+        box-sizing: border-box;
+        order: -1; /* Гарантирует, что шифр всегда будет первым элементом сверху */
     }
-    /* Скрываем пустые фантомные ячейки шифра в остальных строках, если они есть */
     .tasting-table td[rowspan="6"]:not(:first-child) {
         display: none;
     }
 
-    /* 4. Превращаем каждую строчку (балл) в красивую карточку */
+    /* 3. Превращаем каждую строку в прозрачный контейнер */
     .tasting-table tbody tr {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        padding: 12px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        display: contents; /* Разрушает строки tr, позволяя ячейкам td сортироваться глобально */
     }
 
-    /* 5. Выделяем ячейку с оценкой (например, "10", "9") */
-    .tasting-table td.score-col {
-        background: #2563eb;
+    /* 4. Отключаем боковые вердикты, так как в опроснике они не нужны */
+    .tasting-table td.verdict-col {
+        display: none;
+    }
+
+    /* 5. Создаем новые заголовки для критериев с помощью псевдоэлементов */
+    /* Мы берем ячейку 10 баллов для каждого критерия и вешаем над ней красивую плашку */
+    .tasting-table tr[data-score="10"] td.cell-clickable::before {
+        display: block;
+        padding: 8px 12px;
+        margin: 15px 0 10px 0;
+        background: #1e40af;
         color: #ffffff;
-        font-size: 16px;
-        font-weight: 700;
-        padding: 6px 12px;
-        border-radius: 6px;
-        margin-bottom: 10px;
-        text-align: left;
-    }
-    .tasting-table td.score-col::before {
-        content: "Оценка: ";
-        font-weight: 400;
         font-size: 14px;
-        opacity: 0.9;
+        font-weight: 700;
+        border-radius: 6px;
     }
+    .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="appearance"]::before { content: "1. Внешний вид продукта"; }
+    .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="color"]::before { content: "2. Цвет на разрезе"; }
+    .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="aroma"]::before { content: "3. Запах (аромат)"; }
+    .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="taste"]::before { content: "4. Вкус продукта"; }
+    .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="texture"]::before { content: "5. Консистенция (нежность, жесткость)"; }
+    .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="juiciness"]::before { content: "6. Сочность"; }
 
-    /* 6. Превращаем интерактивные ячейки в удобные вертикальные кнопки */
+    /* 6. Превращаем варианты оценок в удобные кликабельные кнопки */
     .tasting-table td.cell-clickable {
+        display: block;
+        width: 100% !important;
         text-align: left;
-        padding: 10px 12px;
-        margin-bottom: 6px;
+        padding: 12px 15px;
+        margin-bottom: 5px;
         border: 1px solid #e2e8f0;
         border-radius: 6px;
         font-size: 13px;
-        background: #f8fafc;
+        background: #ffffff;
+        box-sizing: border-box;
+        cursor: pointer;
+        transition: all 0.2s ease;
     }
 
-    /* Автоматически подставляем название показателя перед текстом ответа */
-    .tasting-table td.cell-clickable[data-metric="appearance"]::before { content: "Внешний вид: "; font-weight: 700; color: #4a5568; }
-    .tasting-table td.cell-clickable[data-metric="color"]::before { content: "Цвет на разрезе: "; font-weight: 700; color: #4a5568; }
-    .tasting-table td.cell-clickable[data-metric="aroma"]::before { content: "Запах (аромат): "; font-weight: 700; color: #4a5568; }
-    .tasting-table td.cell-clickable[data-metric="taste"]::before { content: "Вкус: "; font-weight: 700; color: #4a5568; }
-    .tasting-table td.cell-clickable[data-metric="texture"]::before { content: "Консистенция: "; font-weight: 700; color: #4a5568; }
-    .tasting-table td.cell-clickable[data-metric="juiciness"]::before { content: "Сочность: "; font-weight: 700; color: #4a5568; }
+    /* Прячем ячейки с баллами (10, 9, 8), вместо этого пишем балл прямо в кнопке */
+    .tasting-table td.score-col {
+        display: none;
+    }
+    
+    /* Добавляем текст количества баллов в конец каждой кнопки-варианта */
+    .tasting-table tr[data-score="10"] td.cell-clickable::after { content: " — 10 баллов"; font-weight: 600; color: #2563eb; float: right; }
+    .tasting-table tr[data-score="9"] td.cell-clickable::after { content: " — 9 баллов"; font-weight: 600; color: #2563eb; float: right; }
+    .tasting-table tr[data-score="8"] td.cell-clickable::after { content: " — 8 баллов"; font-weight: 600; color: #2563eb; float: right; }
+    .tasting-table tr[data-score="7"] td.cell-clickable::after { content: " — 7 баллов"; font-weight: 600; color: #2563eb; float: right; }
+    .tasting-table tr[data-score="6"] td.cell-clickable::after { content: " — 6 баллов"; font-weight: 600; color: #2563eb; float: right; }
+    .tasting-table tr[data-score="5"] td.cell-clickable::after { content: " — 5 баллов"; font-weight: 600; color: #2563eb; float: right; }
 
-    /* Стили для выбранных ответов на мобильном */
+    /* 7. Магия сортировки: группируем все кнопки по их критериям (data-metric) */
+    .tasting-table td.cell-clickable[data-metric="appearance"] { order: 1; }
+    .tasting-table td.cell-clickable[data-metric="color"] { order: 2; }
+    .tasting-table td.cell-clickable[data-metric="aroma"] { order: 3; }
+    .tasting-table td.cell-clickable[data-metric="taste"] { order: 4; }
+    .tasting-table td.cell-clickable[data-metric="texture"] { order: 5; }
+    .tasting-table td.cell-clickable[data-metric="juiciness"] { order: 6; }
+
+    /* 8. Подсвечиваем выбранный дегустатором вариант */
     .tasting-table td.cell-clickable.selected {
-        background-color: #10b981 !important; /* Зеленый цвет для наглядности выбора */
-        border-color: #10b981;
+        background-color: #2563eb !important;
+        border-color: #2563eb;
         color: #ffffff !important;
     }
-    .tasting-table td.cell-clickable.selected::before {
+    .tasting-table td.cell-clickable.selected::after {
         color: #ffffff !important;
-    }
-
-    /* 7. Оформляем итоговый вердикт строки */
-    .tasting-table td.verdict-col {
-        text-align: right;
-        font-size: 12px;
-        color: #64748b;
-        padding-top: 8px;
-        border: none;
-        border-top: 1px solid #f1f5f9;
-        margin-top: 8px;
-    }
-    .tasting-table td.verdict-col::before {
-        content: "Качество: ";
-        float: left;
-        font-weight: 600;
     }
 }
+
 
 
     </style>
