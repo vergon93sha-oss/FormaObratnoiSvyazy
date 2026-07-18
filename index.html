@@ -643,7 +643,7 @@
     
     <script>
         // ВСТАВЬТЕ СЮДА ВАШ СКОПИРОВАННЫЙ URL ИЗ GOOGLE APPS SCRIPT
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz..."; 
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwSjbCF-vp_kYBn2sEMoaR8uRhJhhtVi7IcueXbhWC9jNA38boM02NemcVWQnk_VksA/exec"; 
         
         // Установка текущей даты при запуске
         window.onload = function() {
@@ -795,7 +795,7 @@
                 body: JSON.stringify(payload)
             })
             .then(() => {
-                showToast("Результаты успешно отправлены в Google Таблицу!", "success");
+                showToast("Результаты успешно отправлены!", "success");
                 resetForm();
             })
             .catch(error => {
