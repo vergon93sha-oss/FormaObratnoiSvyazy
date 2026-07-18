@@ -46,20 +46,21 @@
             pointer-events: none;
         }
         
-        /* КАРТОЧКА: Ультра-прозрачное стекло */
+         /* КАРТОЧКА: Максимально прозрачное стекло */
         .container {
             position: relative;
             z-index: 10;
             width: 100%;
             max-width: 1200px;
-            background: rgba(255, 255, 255, 0.12) !important; /* Почти убрали белый цвет */
-            backdrop-filter: blur(8px) !important;           /* Уменьшили размытие, чтобы видеть текстуру видео */
-            -webkit-backdrop-filter: blur(8px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.6);       /* Яркая стеклянная граница */
+            background: rgba(255, 255, 255, 0.02) !important; /* Было 0.12, сделали 0.02 — белый цвет почти исчез */
+            backdrop-filter: blur(2px) !important;           /* Было 8px, сделали 2px — убрали мутное размытие видео */
+            -webkit-backdrop-filter: blur(2px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.4);       /* Сделали саму границу чуть нежнее */
             border-radius: 24px;
             padding: 40px 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);       /* Мягкая тень, чтобы карточка оторвалась от фона */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);       
         }
+
         
         /* Шапка и Логотип */
         .header {
@@ -332,9 +333,22 @@
             font-size: 11px;
             color: #64748b;
         }
-        
+        h1 {
+            text-align: center !important;      /* Выравниваем строго по центру */
+            width: 100%;                        /* Разворачиваем на всю ширину */
+            margin-top: 25px !important;        /* Отступ сверху от логотипа */
+            margin-bottom: 25px !important;     /* Отступ снизу до полей ввода */
+            font-size: 24px;
+            color: #2d3748;
+        }
+
         /* Адаптивность под мобильные телефоны */
-        @media (max-width: 600px) {
+        @media (max-width: 600px) { h1 {
+                margin-top: 35px !important;    /* Делаем отступ побольше на телефонах */
+                margin-bottom: 20px !important; 
+                font-size: 20px !important;     /* Слегка уменьшаем размер шрифта */
+            }
+
             body {
                 padding: 15px 10px;
             }
@@ -395,6 +409,7 @@
                 margin-top: 52px;
             }
             
+            /* Превращаем мобильные заголовки в аккуратные синие стёклышки */
             .tasting-table tr[data-score="10"] td.cell-clickable::before {
                 display: block;
                 position: absolute;
@@ -402,13 +417,15 @@
                 left: 0;
                 right: 0;
                 padding: 8px 12px;
-                background: #1e40af;
-                color: #ffffff;
+                background: rgba(59, 174, 199, 0.2) !important; /* Легкий прозрачный сине-голубой тон */
+                box-shadow: inset 0 0 0 1.5px rgba(59, 174, 199, 0.5) !important; /* Тонкая грань стекла */
+                color: #1a202c !important; /* Тёмный цвет текста, чтобы отлично читался */
                 font-size: 14px;
                 font-weight: 700;
                 border-radius: 6px;
                 box-sizing: border-box;
             }
+
             .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="appearance"]::before { content: "1. Внешний вид продукта"; }
             .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="color"]::before { content: "2. Цвет на разрезе"; }
             .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="aroma"]::before { content: "3. Запах (аромат)"; }
@@ -480,13 +497,7 @@
             <div class="logo-container">
                 <img src="https://storage.yandexcloud.net/kartochkatovara/Russky_1.png" alt="Логотип RUSSKY" style="height: 35px; width: auto; display: block;">
             </div>
-            <div class="controls">
-                <button type="button" class="btn btn-reset" onclick="resetForm()">Сбросить</button>
-                <button type="button" class="btn btn-send" id="btnSubmit" onclick="sendToGoogleSheets()">
-                    <span>Отправить результаты</span>
-                </button>
-            </div>
-        </div>
+            
         
         <!-- Название -->
         <h1 class="title">Дегустационный лист по оценке продукта по 10-балльной шкале</h1>
@@ -513,7 +524,7 @@
             </div>
         </div>
         
-        <div class="table-subtitle">Положительные показатели качества продукта</div>
+        <div class="table-subtitle">Вы помогаете нам стать лучше!</div>
         
         <!-- Инструкция -->
         <div class="instruction-box">
@@ -636,7 +647,13 @@
         </div>
     </div>
 
-
+<div class="controls">
+                <button type="button" class="btn btn-reset" onclick="resetForm()">Сбросить</button>
+                <button type="button" class="btn btn-send" id="btnSubmit" onclick="sendToGoogleSheets()">
+                    <span>Отправить результаты</span>
+                </button>
+            </div>
+        </div>
     
     <!-- Компонент уведомления -->
     <div id="toastNotification" class="toast">Сообщение системы</div>
