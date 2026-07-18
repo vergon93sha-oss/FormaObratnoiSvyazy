@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Дегустационный лист по оценке продукта по 10-балльной шкале</title>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap');
         
@@ -24,7 +26,6 @@
             z-index: -1;
             pointer-events: none;
         }
-
         body {
             font-family: 'Montserrat', sans-serif;
             min-height: 100vh;
@@ -33,9 +34,9 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            background-color: #000; /* Резервный цвет, пока грузится видео */
+            background-color: #000;
         }
-        /* Декоративные облака на заднем плане */
+        /* Декоративные облака */
         .cloud-decor {
             position: absolute;
             background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
@@ -44,25 +45,28 @@
             z-index: 1;
             pointer-events: none;
         }
+        
+        /* КАРТОЧКА: Ультра-прозрачное стекло */
         .container {
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 1200px; /* Увеличили с 960px, чтобы на ПК было крупнее */
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.12) !important; /* Почти убрали белый цвет */
+            backdrop-filter: blur(8px) !important;           /* Уменьшили размытие, чтобы видеть текстуру видео */
+            -webkit-backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.6);       /* Яркая стеклянная граница */
             border-radius: 24px;
-            padding: 40px 30px; /* Оптимизировали отступы */
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            padding: 40px 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);       /* Мягкая тень, чтобы карточка оторвалась от фона */
         }
+        
         /* Шапка и Логотип */
         .header {
-           display: flex;
+            display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap; /* Кнопки перенесутся вниз, если не поместятся */
+            flex-wrap: wrap;
             gap: 15px;
             margin-bottom: 30px;
         }
@@ -70,19 +74,6 @@
             display: flex;
             align-items: center;
             gap: 4px;
-        }
-        .logo-text {
-            font-size: 28px;
-            font-weight: 900;
-            letter-spacing: 2px;
-            color: #1e40af;
-            font-style: italic;
-            font-family: sans-serif;
-        }
-        .logo-icon {
-            color: #0284c7;
-            width: 28px;
-            height: 28px;
         }
         /* Панель управления */
         .controls {
@@ -104,11 +95,11 @@
             gap: 8px;
         }
         .btn-reset {
-            background-color: #cbd5e1;
+            background-color: rgba(203, 213, 225, 0.7);
             color: #334155;
         }
         .btn-reset:hover {
-            background-color: #94a3b8;
+            background-color: rgba(148, 163, 184, 0.9);
         }
         .btn-send {
             background-color: #10b981;
@@ -143,7 +134,7 @@
             align-items: flex-end;
             gap: 12px;
             width: 100%;
-            flex-wrap: wrap; /* Позволит полю встать под текстом на смартфонах */
+            flex-wrap: wrap;
         }
         .info-label {
             font-size: 14px;
@@ -154,7 +145,7 @@
             flex: 1;
             background: transparent;
             border: none;
-            border-bottom: 1px solid #a0aec0;
+            border-bottom: 1px solid #4a5568;
             padding-bottom: 4px;
             font-family: 'Montserrat', sans-serif;
             font-size: 14px;
@@ -168,7 +159,7 @@
         }
         .info-input-product {
             font-weight: 700;
-            border-bottom-color: #4a5568;
+            border-bottom-color: #1a202c;
         }
         /* Таблица */
         .table-subtitle {
@@ -184,16 +175,16 @@
             overflow-x: auto;
             margin-bottom: 30px;
             border-radius: 8px;
-            box-shadow: 0 0 0 1px #a0aec0;
+            box-shadow: 0 0 0 1px rgba(74, 85, 104, 0.3);
         }
         .tasting-table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #ffffff;
+            background-color: transparent !important; /* Убрали белый фон у таблицы */
             min-width: 800px;
         }
         .tasting-table th, .tasting-table td {
-            border: 1px solid #4a5568;
+            border: 1px solid rgba(74, 85, 104, 0.4);
             padding: 8px 10px;
             font-size: 11px;
             line-height: 1.3;
@@ -201,7 +192,7 @@
             vertical-align: middle;
         }
         .tasting-table th {
-            background-color: rgba(248, 250, 252, 0.9);
+            background-color: rgba(0, 0, 0, 0.03) !important; /* Легчайшее затемнение шапки */
             font-weight: 600;
             color: #1e293b;
         }
@@ -211,35 +202,39 @@
             letter-spacing: 0.5px;
             padding: 12px 10px;
         }
-        /* Интерактивные ячейки */
+        /* Абсолютно прозрачные ячейки таблицы */
         .cell-clickable {
             cursor: pointer;
-            background-color: #ffffff;
+            background-color: transparent !important; 
             transition: all 0.15s ease;
             user-select: none;
         }
+        ./* Ховер при наведении — делаем легкий нежно-голубой отсвет */
         .cell-clickable:hover {
-            background-color: rgba(37, 99, 235, 0.08);
+            background-color: rgba(59, 174, 199, 0.1) !important;
         }
+
+        /* Выбранная ячейка: Эффект нежно-голубого стекла */
         .cell-clickable.selected {
-            background-color: #2563eb !important;
-            color: #ffffff !important;
-            font-weight: 600;
+            background: rgba(59, 174, 199, 0.25) !important; /* Прозрачный цвет в тон логотипа */
+            box-shadow: inset 0 0 0 2px rgba(59, 174, 199, 0.6) !important; /* Внутренняя грань стеклышка */
+            color: #1a202c !important; /* Тёмный текст для идеальной читаемости */
+            font-weight: 700 !important;
         }
         .score-col {
             font-weight: 700;
-            background-color: #f1f5f9;
+            background-color: rgba(0, 0, 0, 0.02) !important;
             width: 50px;
         }
         .verdict-col {
             font-weight: 500;
-            background-color: rgba(248, 250, 252, 0.9);
+            background-color: rgba(0, 0, 0, 0.01) !important;
             width: 110px;
         }
         /* Ввод шифра проб */
         .sample-input {
             width: 100%;
-            border: 1px dashed #cbd5e1;
+            border: 1px dashed rgba(74, 85, 104, 0.5);
             border-radius: 4px;
             padding: 6px;
             text-align: center;
@@ -251,11 +246,11 @@
         }
         .sample-input:focus {
             border-color: #2563eb;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.4);
         }
         /* Инструкция */
         .instruction-box {
-            background-color: #eff6ff;
+            background-color: rgba(37, 99, 235, 0.06) !important; /* Прозрачно-голубоватый тон */
             border-left: 4px solid #3b82f6;
             padding: 12px 16px;
             border-radius: 0 8px 8px 0;
@@ -266,8 +261,8 @@
         }
         /* Панель результатов */
         .summary-panel {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            border: 1px solid rgba(74, 85, 104, 0.2) !important;
             border-radius: 12px;
             padding: 20px;
             display: flex;
@@ -285,13 +280,22 @@
             font-weight: 600;
             color: #334155;
         }
+        /* Переносим эффект жидкого стекла на плашки результатов */
         .summary-value {
-            font-size: 18px;
-            font-weight: 700;
-            color: #2563eb;
-            margin-left: 8px;
+            font-size: 14px;
+            font-weight: 700 !important;
+            color: #1a202c !important; /* Чёткий тёмный текст, как в таблице */
+            background: rgba(59, 174, 199, 0.25) !important; /* Наше нежно-голубое стекло */
+            box-shadow: inset 0 0 0 2px rgba(59, 174, 199, 0.6) !important; /* Грани стёклышка */
+            padding: 6px 14px; /* Внутренние отступы, чтобы получилась аккуратная кнопочка */
+            border-radius: 8px; /* Скругление углов */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
         }
-        /* Всплывающее окно уведомлений */
+
+        /* Всплывающее окно */
         .toast {
             position: fixed;
             bottom: 24px;
@@ -321,146 +325,142 @@
         .footer {
             margin-top: 40px;
             padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px solid rgba(74, 85, 104, 0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 11px;
-            color: #94a3b8;
+            color: #64748b;
         }
+        
         /* Адаптивность под мобильные телефоны */
         @media (max-width: 600px) {
             body {
-                padding: 15px 10px; /* Уменьшаем внешние отступы страницы */
+                padding: 15px 10px;
             }
             .container {
-                padding: 20px 15px; /* Меньше пустых полей внутри контейнера */
+                padding: 20px 15px;
                 border-radius: 12px;
             }
             .title {
-                font-size: 18px; /* Уменьшаем главный заголовок */
+                font-size: 18px;
             }
             .info-label {
-                width: 100%; /* Текст ФИО/Дата будет над полем, а не сбоку */
+                width: 100%;
             }
             .info-input {
                 width: 100%;
             }
         }
-       @media (max-width: 600px) {
-    /* 1. Сбрасываем таблицу и включаем Flex-контейнер для всей таблицы */
-    .table-wrapper {
-        overflow-x: visible;
-        box-shadow: none;
-        border: none;
-    }
-    .tasting-table {
-        display: flex;
-        flex-direction: column;
-        min-width: 100% !important;
-        width: 100% !important;
-    }
-    .tasting-table thead {
-        display: none; /* Скрываем шапку ПК-версии */
-    }
-    .tasting-table tbody {
-        display: flex;
-        flex-direction: column;
-        gap: 25px; /* Отступ между большими блоками-критериями */
-    }
-    /* 2. Поле "Шифр проб" выносим в самый верх всей формы */
-    .tasting-table tbody tr:first-child td[rowspan="6"] {
-        display: block;
-        width: 100% !important;
-        background: #f8fafc !important;
-        padding: 15px;
-        border: 1px dashed #cbd5e1;
-        border-radius: 8px;
-        box-sizing: border-box;
-        order: -1; /* Гарантирует, что шифр всегда будет первым элементом сверху */
-    }
-    .tasting-table td[rowspan="6"]:not(:first-child) {
-        display: none;
-    }
-    /* 3. Превращаем каждую строку в прозрачный контейнер */
-    .tasting-table tbody tr {
-        display: contents; /* Разрушает строки tr, позволяя ячейкам td сортироваться глобально */
-    }
-    /* 4. Отключаем боковые вердикты, так как в опроснике они не нужны */
-    .tasting-table td.verdict-col {
-        display: none;
-    }
-    /* 5. Создаем новые заголовки для критериев с помощью псевдоэлементов */
-    .tasting-table tr[data-score="10"] td.cell-clickable {
-        position: relative;
-        margin-top: 52px; /* Создаем свободное место сверху под заголовок */
-    }
-    
-    .tasting-table tr[data-score="10"] td.cell-clickable::before {
-        display: block;
-        position: absolute;
-        top: -44px; /* Выталкиваем синий заголовок наверх, за пределы рамки */
-        left: 0;
-        right: 0;
-        padding: 8px 12px;
-        background: #1e40af;
-        color: #ffffff;
-        font-size: 14px;
-        font-weight: 700;
-        border-radius: 6px;
-        box-sizing: border-box;
-    }
-    .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="appearance"]::before { content: "1. Внешний вид продукта"; }
-    .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="color"]::before { content: "2. Цвет на разрезе"; }
-    .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="aroma"]::before { content: "3. Запах (аромат)"; }
-    .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="taste"]::before { content: "4. Вкус продукта"; }
-    .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="texture"]::before { content: "5. Консистенция (нежность, жесткость)"; }
-    .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="juiciness"]::before { content: "6. Сочность"; }
-    /* 6. Превращаем варианты оценок в удобные кликабельные кнопки */
-    .tasting-table td.cell-clickable {
-        display: block;
-        width: 100% !important;
-        text-align: left;
-        padding: 12px 15px;
-        margin-bottom: 5px;
-        border: 1px solid #e2e8f0;
-        border-radius: 6px;
-        font-size: 13px;
-        background: #ffffff;
-        box-sizing: border-box;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    /* Прячем ячейки с баллами (10, 9, 8), вместо этого пишем балл прямо в кнопке */
-    .tasting-table td.score-col {
-        display: none;
-    }
-    
-    /* Добавляем текст количества баллов в конец каждой кнопки-варианта */
-    .tasting-table tr[data-score="10"] td.cell-clickable::after { content: " — 10 баллов"; font-weight: 600; color: #2563eb; float: right; }
-    .tasting-table tr[data-score="9"] td.cell-clickable::after { content: " — 9 баллов"; font-weight: 600; color: #2563eb; float: right; }
-    .tasting-table tr[data-score="8"] td.cell-clickable::after { content: " — 8 баллов"; font-weight: 600; color: #2563eb; float: right; }
-    .tasting-table tr[data-score="7"] td.cell-clickable::after { content: " — 7 баллов"; font-weight: 600; color: #2563eb; float: right; }
-    .tasting-table tr[data-score="6"] td.cell-clickable::after { content: " — 6 баллов"; font-weight: 600; color: #2563eb; float: right; }
-    .tasting-table tr[data-score="5"] td.cell-clickable::after { content: " — 5 баллов"; font-weight: 600; color: #2563eb; float: right; }
-    /* 7. Магия сортировки: группируем все кнопки по их критериям (data-metric) */
-    .tasting-table td.cell-clickable[data-metric="appearance"] { order: 1; }
-    .tasting-table td.cell-clickable[data-metric="color"] { order: 2; }
-    .tasting-table td.cell-clickable[data-metric="aroma"] { order: 3; }
-    .tasting-table td.cell-clickable[data-metric="taste"] { order: 4; }
-    .tasting-table td.cell-clickable[data-metric="texture"] { order: 5; }
-    .tasting-table td.cell-clickable[data-metric="juiciness"] { order: 6; }
-    /* 8. Подсвечиваем выбранный дегустатором вариант */
-    .tasting-table td.cell-clickable.selected {
-        background-color: #2563eb !important;
-        border-color: #2563eb;
-        color: #ffffff !important;
-    }
-    .tasting-table td.cell-clickable.selected::after {
-        color: #ffffff !important;
-    }
-}
+        @media (max-width: 600px) {
+            .table-wrapper {
+                overflow-x: visible;
+                box-shadow: none;
+                border: none;
+            }
+            .tasting-table {
+                display: flex;
+                flex-direction: column;
+                min-width: 100% !important;
+                width: 100% !important;
+            }
+            .tasting-table thead {
+                display: none;
+            }
+            .tasting-table tbody {
+                display: flex;
+                flex-direction: column;
+                gap: 25px;
+            }
+            .tasting-table tbody tr:first-child td[rowspan="6"] {
+                display: block;
+                width: 100% !important;
+                background: rgba(255, 255, 255, 0.1) !important;
+                padding: 15px;
+                border: 1px dashed rgba(74, 85, 104, 0.3);
+                border-radius: 8px;
+                box-sizing: border-box;
+                order: -1;
+            }
+            .tasting-table td[rowspan="6"]:not(:first-child) {
+                display: none;
+            }
+            .tasting-table tbody tr {
+                display: contents;
+            }
+            .tasting-table td.verdict-col {
+                display: none;
+            }
+            .tasting-table tr[data-score="10"] td.cell-clickable {
+                margin-top: 52px;
+            }
+            
+            .tasting-table tr[data-score="10"] td.cell-clickable::before {
+                display: block;
+                position: absolute;
+                top: -44px;
+                left: 0;
+                right: 0;
+                padding: 8px 12px;
+                background: #1e40af;
+                color: #ffffff;
+                font-size: 14px;
+                font-weight: 700;
+                border-radius: 6px;
+                box-sizing: border-box;
+            }
+            .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="appearance"]::before { content: "1. Внешний вид продукта"; }
+            .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="color"]::before { content: "2. Цвет на разрезе"; }
+            .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="aroma"]::before { content: "3. Запах (аромат)"; }
+            .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="taste"]::before { content: "4. Вкус продукта"; }
+            .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="texture"]::before { content: "5. Консистенция (нежность, жесткость)"; }
+            .tasting-table tr[data-score="10"] td.cell-clickable[data-metric="juiciness"]::before { content: "6. Сочность"; }
+            
+            .tasting-table td.cell-clickable {
+                display: block;
+                width: 100% !important;
+                text-align: left;
+                padding: 12px 15px;
+                margin-bottom: 5px;
+                border: 1px solid rgba(74, 85, 104, 0.2);
+                border-radius: 6px;
+                font-size: 13px;
+                background: rgba(255, 255, 255, 0.1) !important;
+                box-sizing: border-box;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                position: relative;
+            }
+            .tasting-table td.score-col {
+                display: none;
+            }
+            
+            .tasting-table tr[data-score="10"] td.cell-clickable::after { content: " — 10 баллов"; font-weight: 600; color: #2563eb; float: right; }
+            .tasting-table tr[data-score="9"] td.cell-clickable::after { content: " — 9 баллов"; font-weight: 600; color: #2563eb; float: right; }
+            .tasting-table tr[data-score="8"] td.cell-clickable::after { content: " — 8 баллов"; font-weight: 600; color: #2563eb; float: right; }
+            .tasting-table tr[data-score="7"] td.cell-clickable::after { content: " — 7 баллов"; font-weight: 600; color: #2563eb; float: right; }
+            .tasting-table tr[data-score="6"] td.cell-clickable::after { content: " — 6 баллов"; font-weight: 600; color: #2563eb; float: right; }
+            .tasting-table tr[data-score="5"] td.cell-clickable::after { content: " — 5 баллов"; font-weight: 600; color: #2563eb; float: right; }
+            
+            .tasting-table td.cell-clickable[data-metric="appearance"] { order: 1; }
+            .tasting-table td.cell-clickable[data-metric="color"] { order: 2; }
+            .tasting-table td.cell-clickable[data-metric="aroma"] { order: 3; }
+            .tasting-table td.cell-clickable[data-metric="taste"] { order: 4; }
+            .tasting-table td.cell-clickable[data-metric="texture"] { order: 5; }
+            .tasting-table td.cell-clickable[data-metric="juiciness"] { order: 6; }
+            
+            .tasting-table td.cell-clickable.selected {
+                background: rgba(59, 174, 199, 0.25) !important;
+                border-color: rgba(59, 174, 199, 0.7) !important;
+                color: #1a202c !important;
+            }
+            .tasting-table td.cell-clickable.selected::after {
+                color: #3bae9f !important; /* Цвет приписочки баллов на мобилке */
+            }
+
+        }
     </style>
+
 </head>
 <body>
     <!-- Живой видео-фон -->
@@ -468,19 +468,17 @@
         <source src="87786-602074234.mp4" type="video/mp4">
         Ваш браузер не поддерживает видео HTML5.
     </video>
-
-    <!-- Задний план (Облака) -->
+    
+    <!-- Декоративные облака -->
     <div class="cloud-decor" style="width: 300px; height: 130px; top: 20px; left: 20px;"></div>
     <div class="cloud-decor" style="width: 400px; height: 160px; top: 30%; right: 40px;"></div>
     
+    <!-- Главная карточка бланка -->
     <div class="container">
         <!-- Шапка -->
         <div class="header">
             <div class="logo-container">
-                <span class="logo-text">RUSSKY</span>
-                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M2 21L22 12L2 3V10L17 12L2 14V21Z" fill="currentColor"/>
-                </svg>
+                <img src="https://storage.yandexcloud.net/kartochkatovara/Russky_1.png" alt="Логотип RUSSKY" style="height: 35px; width: auto; display: block;">
             </div>
             <div class="controls">
                 <button type="button" class="btn btn-reset" onclick="resetForm()">Сбросить</button>
@@ -489,8 +487,10 @@
                 </button>
             </div>
         </div>
+        
         <!-- Название -->
         <h1 class="title">Дегустационный лист по оценке продукта по 10-балльной шкале</h1>
+        
         <!-- Поля информации -->
         <div class="info-grid">
             <div class="info-row">
@@ -509,14 +509,17 @@
             </div>
             <div class="info-row" style="margin-top: 10px;">
                 <span class="info-label" style="font-weight: 600;">Наименование продукта</span>
-                <input type="text" id="product" class="info-input info-input-product" placeholder="Начните вводить наименование...">
+                <input type="text" id="product" class="info-input info-input-product" placeholder="Введите наименование...">
             </div>
         </div>
+        
         <div class="table-subtitle">Положительные показатели качества продукта</div>
+        
         <!-- Инструкция -->
         <div class="instruction-box">
             <strong>Инструкция:</strong> Заполните информацию о дегустаторе и продукте, кликните по соответствующим ячейкам оценок в таблице и нажмите кнопку <strong>«Отправить результаты»</strong>. Все данные мгновенно запишутся в вашу Google Таблицу.
         </div>
+        
         <!-- Таблица органолептики -->
         <div class="table-wrapper">
             <table class="tasting-table" id="tastingTable">
@@ -539,7 +542,7 @@
                 <tbody>
                     <!-- 10 баллов -->
                     <tr data-score="10">
-                        <td rowspan="6" style="background-color: #f8fafc;">
+                        <td rowspan="6" style="background-color: rgba(248, 250, 252, 0.3);">
                             <input type="text" id="sample_code" class="sample-input" placeholder="Шифр">
                         </td>
                         <td class="score-col">10</td>
@@ -609,28 +612,39 @@
                 </tbody>
             </table>
         </div>
-        <!-- Панель расчёта результатов -->
+        
+       <!-- Панель расчёта результатов -->
         <div class="summary-panel">
-            <div class="summary-item">
+            <div class="summary-item" style="display: flex; align-items: center;">
                 <span class="summary-label">Рассчитанный средний балл:</span>
                 <span id="averageScore" class="summary-value">—</span>
             </div>
-            <div class="summary-item">
+            <div class="summary-item" style="display: flex; align-items: center;">
                 <span class="summary-label">Общая оценка качества:</span>
                 <span id="averageVerdict" class="summary-value">—</span>
             </div>
         </div>
+
+        
         <!-- Подвал бланка -->
         <div class="footer">
-            <span>Электронный дегустационный лист RUSSKY</span>
-            <span>Все результаты мгновенно передаются в единую базу данных Google Таблиц.</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px;">
+                Электронный дегустационный лист 
+                <img src="https://storage.yandexcloud.net/kartochkatovara/Russky_1.png" alt="RUSSKY" style="height: 14px; width: auto; object-fit: contain; transform: translateY(2px);">
+            </span>
+            <span></span>
         </div>
     </div>
+
+
+    
     <!-- Компонент уведомления -->
     <div id="toastNotification" class="toast">Сообщение системы</div>
+    
     <script>
         // ВСТАВЬТЕ СЮДА ВАШ СКОПИРОВАННЫЙ URL ИЗ GOOGLE APPS SCRIPT
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz..."; 
+        
         // Установка текущей даты при запуске
         window.onload = function() {
             const dateField = document.getElementById('date');
@@ -642,6 +656,7 @@
                 dateField.value = `${yyyy}-${mm}-${dd}`;
             }
         };
+        
         // Состояние выбранных показателей
         const currentEvaluation = {
             appearance: null,
@@ -659,6 +674,7 @@
             texture: "",
             juiciness: ""
         };
+        
         // Таблица текстовых вердиктов для среднего балла
         const scaleVerdicts = [
             { min: 9.5, max: 10.0, label: "Высшее (безупречное)" },
@@ -668,32 +684,36 @@
             { min: 5.5, max: 6.49, label: "Выше среднего" },
             { min: 5.0, max: 5.49, label: "Среднее" }
         ];
+        
         // Клик по ячейке
         function toggleCell(cell) {
             const metric = cell.getAttribute('data-metric');
             const score = parseInt(cell.parentElement.getAttribute('data-score'));
             const textContent = cell.innerText.replace(/[\n\r]+/g, ' ').trim();
             const cellsOfMetric = document.querySelectorAll(`[data-metric="${metric}"]`);
+            
             if (cell.classList.contains('selected')) {
                 cell.classList.remove('selected');
                 currentEvaluation[metric] = null;
                 currentTexts[metric] = "";
             } else {
                 cellsOfMetric.forEach(c => c.classList.remove('selected'));
-                cell.classList.add('selected'); // Примечание: в исходном коде было cell.classList.add('selected'); исправлено ниже для надежности
                 cell.classList.add('selected');
                 currentEvaluation[metric] = score;
                 currentTexts[metric] = `${textContent} (${score} б)`;
             }
             calculateAverage();
         }
+        
         // Перерасчет среднего балла
         let finalAverageScore = 0;
         let finalVerdictText = "";
+        
         function calculateAverage() {
             const scores = Object.values(currentEvaluation).filter(val => val !== null);
             const scoreElement = document.getElementById('averageScore');
             const verdictElement = document.getElementById('averageVerdict');
+            
             if (scores.length === 0) {
                 scoreElement.innerText = "—";
                 verdictElement.innerText = "—";
@@ -701,11 +721,14 @@
                 finalVerdictText = "";
                 return;
             }
+            
             const sum = scores.reduce((acc, curr) => acc + curr, 0);
             const average = sum / scores.length;
             const roundedAverage = Math.round(average * 10) / 10;
+            
             finalAverageScore = roundedAverage.toFixed(1);
             scoreElement.innerText = finalAverageScore;
+            
             let matchedVerdict = "Ниже среднего";
             for (const item of scaleVerdicts) {
                 if (roundedAverage >= item.min && roundedAverage <= item.max) {
@@ -716,35 +739,36 @@
             finalVerdictText = matchedVerdict;
             verdictElement.innerText = matchedVerdict;
         }
+        
         // Отправка данных в Google Таблицу
         function sendToGoogleSheets() {
             const btn = document.getElementById('btnSubmit');
-            // Собираем поля ввода
             const fio = document.getElementById('fio').value.trim();
             const date = document.getElementById('date').value;
             const organization = document.getElementById('organization').value.trim();
             const job = document.getElementById('job').value.trim();
             const product = document.getElementById('product').value.trim();
             const sample = document.getElementById('sample_code').value.trim();
-            // Базовая валидация
+            
             if (!fio || !product) {
                 showToast("Пожалуйста, заполните ФИО и Наименование продукта!", "error");
                 return;
             }
-            // Проверка, все ли показатели оценены
+            
             const emptyMetrics = Object.keys(currentEvaluation).filter(k => currentEvaluation[k] === null);
             if (emptyMetrics.length > 0) {
                 showToast("Пожалуйста, оцените все органолептические показатели в таблице!", "error");
                 return;
             }
+            
             if (GOOGLE_SCRIPT_URL.includes("AKfycbz...")) {
                 showToast("Ошибка: Сначала настройте и вставьте ваш URL веб-приложения Google Apps Script в код страницы!", "error");
                 return;
             }
-            // Отключаем кнопку во время отправки
+            
             btn.disabled = true;
             btn.querySelector('span').innerText = "Отправка...";
-            // Собираем полный JSON-пакет данных
+            
             const payload = {
                 fio: fio,
                 date: date,
@@ -761,7 +785,7 @@
                 averageScore: finalAverageScore,
                 verdict: finalVerdictText
             };
-            // Выполняем CORS запрос к Google Apps Script
+            
             fetch(GOOGLE_SCRIPT_URL, {
                 method: "POST",
                 mode: "no-cors", 
@@ -783,7 +807,8 @@
                 btn.querySelector('span').innerText = "Отправить результаты";
             });
         }
-        // Сброс формы в исходное состояние
+        
+        // Сброс формы
         function resetForm() {
             document.getElementById('fio').value = "";
             document.getElementById('organization').value = "";
@@ -796,20 +821,23 @@
             const mm = String(today.getMonth() + 1).padStart(2, '0');
             const dd = String(today.getDate()).padStart(2, '0');
             document.getElementById('date').value = `${yyyy}-${mm}-${dd}`;
+            
             const cells = document.querySelectorAll('.cell-clickable');
             cells.forEach(c => c.classList.remove('selected'));
+            
             for (const key in currentEvaluation) {
                 currentEvaluation[key] = null;
                 currentTexts[key] = "";
             }
             calculateAverage();
         }
+        
         // Показ уведомлений
         function showToast(message, type = "") {
             const toast = document.getElementById('toastNotification');
             toast.innerText = message;
             
-            toast.className = "toast"; // Сброс классов
+            toast.className = "toast"; 
             if (type === "success") toast.classList.add('success');
             if (type === "error") toast.classList.add('error');
             
